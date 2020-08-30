@@ -1,5 +1,3 @@
-import time
-
 from behave import given, when, then
 from selenium.webdriver.support.ui import Select
 
@@ -18,17 +16,30 @@ def step_impl(context, name):
         context.helper.find_by_xpath("/html/body/div[3]/div/div[2]/div/div[1]/button[1]").click()
 
 
-@when('I make deposit: "{deposit}"')
-def step_impl(context, deposit):
+@when('I make deposit: "{deposit}" for user: "{name}"')
+def step_impl(context, deposit, name):
     context.helper.find_by_xpath("/html/body/div[3]/div/div[2]/div/div[3]/button[2]").click()
     context.helper.find_by_xpath("/html/body/div[3]/div/div[2]/div/div[4]/div/form/div/input").send_keys(deposit)
     context.helper.find_by_xpath("/html/body/div[3]/div/div[2]/div/div[4]/div/form/button").click()
+    try:
+        information = "Deposit Successful"
+        information_website = context.helper.find_by_xpath("/html/body/div[3]/div/div[2]/div/div[4]/div/span").text
+        assert information_website == information
+    except AssertionError:
+        context.helper.screenshot(name)
+        print("Test Failure")
+        raise AssertionError
 
 
-@when('Balance is changed : "{deposit}"')
-def step(context, deposit):
-    assert ((int(context.helper.find_by_xpath("/html/body/div[3]/div/div[2]/div/div[2]/strong[2]").text))) == int(
-        deposit)
+@when('Balance is changed : "{deposit}" for user: "{name}"')
+def step(context, deposit, name):
+    try:
+        deposit_website = int(context.helper.find_by_xpath("/html/body/div[3]/div/div[2]/div/div[2]/strong[2]").text)
+        assert deposit_website == int(deposit)
+    except AssertionError:
+        context.helper.screenshot(name)
+        print("Test Failure")
+        raise AssertionError
 
 
 @when('I make the withdrawl: "{withdrawl}"')
@@ -42,10 +53,11 @@ def step(context, withdrawl):
 def step(context, end_balance, name):
     try:
         website_value = int(context.helper.find_by_xpath("/html/body/div[3]/div/div[2]/div/div[2]/strong[2]").text)
+        information = "Transaction successful"
+        information_website = context.helper.find_by_xpath("/html/body/div[3]/div/div[2]/div/div[4]/div/span").text
         assert website_value == int(end_balance)
+        assert information == information_website
     except AssertionError:
         context.helper.screenshot(name)
-        print("Value of end_balance is invalid, should be equal " + str(end_balance) + " but is equal " + str(
-            website_value))
+        print("Test Failure")
         raise AssertionError
-

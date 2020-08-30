@@ -6,8 +6,8 @@ Feature: make a deposit
 
     Scenario Outline: make a deposit
         Given As a client I want to log in as "<name>" properly and balance is 0
-        When I make deposit: "<deposit>"
-        And Balance is changed : "<deposit>"
+        When I make deposit: "<deposit>" for user: "<name>"
+        And Balance is changed : "<deposit>" for user: "<name>"
         And I make the withdrawl: "<withdrawl>"
         Then Balance is changed for "<end_balance>" and if test fail screenshot is captured as file: "<name>".png
 
