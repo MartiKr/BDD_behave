@@ -3,6 +3,7 @@ import time
 from behave import given, when, then
 from selenium.webdriver.support.ui import Select
 
+
 @given('As a client I want to log in as "{name}" properly and balance is 0')
 def step_impl(context, name):
     context.helper.open("http://www.way2automation.com/angularjs-protractor/banking/#/login")
@@ -23,9 +24,12 @@ def step_impl(context, deposit):
     context.helper.find_by_xpath("/html/body/div[3]/div/div[2]/div/div[4]/div/form/div/input").send_keys(deposit)
     context.helper.find_by_xpath("/html/body/div[3]/div/div[2]/div/div[4]/div/form/button").click()
 
+
 @when('Balance is changed : "{deposit}"')
 def step(context, deposit):
-   assert ((int(context.helper.find_by_xpath("/html/body/div[3]/div/div[2]/div/div[2]/strong[2]").text))) == int(deposit)
+    assert ((int(context.helper.find_by_xpath("/html/body/div[3]/div/div[2]/div/div[2]/strong[2]").text))) == int(
+        deposit)
+
 
 @when('I make the withdrawl: "{withdrawl}"')
 def step(context, withdrawl):
@@ -41,7 +45,7 @@ def step(context, end_balance, name):
         assert website_value == int(end_balance)
     except AssertionError:
         context.helper.screenshot(name)
-        print("Value of end_balance is invalid, should be equal " + str(end_balance) + " but is equal " + str(website_value) )
+        print("Value of end_balance is invalid, should be equal " + str(end_balance) + " but is equal " + str(
+            website_value))
         raise AssertionError
-    #context.driver.quit()
 
